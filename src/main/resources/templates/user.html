@@ -13,13 +13,17 @@
 <div class="container-fluid px-0">
     <div class="container-fluid mb-md-2 px-0">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <span th:text="${user.email}" class="navbar-brand font-weight-bolder"></span>
+            <span sec:authentication="name" class="navbar-brand font-weight-bolder"></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNavBar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="userNavBar">
-                <span class="navbar-text mr-auto"
-                      th:text="'with roles: ' + ${user.authorities.iterator().next().authority}"></span>
+                <div class="mr-auto">
+                    <span class="navbar-text">with roles: </span>
+                    <th:block th:each="authority : ${#authentication.getAuthorities()}">
+                        <span class="navbar-text" th:text="${authority} + ' '"></span>
+                    </th:block>
+                </div>
                 <div class="nav navbar-nav">
                     <a class="nav-link" th:href="@{/logout}">Logout</a>
                 </div>

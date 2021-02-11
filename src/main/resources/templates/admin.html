@@ -14,16 +14,15 @@
 <div class="container-fluid px-0">
     <div class="container-fluid mb-md-2 px-0">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <span th:text="${@successUserHandler.currentAuthenticatedUser().getEmail()}"
-                  class="navbar-brand font-weight-bolder"></span>
+            <span sec:authentication="name" class="navbar-brand font-weight-bolder"></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNavBar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="userNavBar">
                 <div class="mr-auto">
                     <span class="navbar-text">with roles: </span>
-                    <th:block th:each="r, iter:${@successUserHandler.currentAuthenticatedUser().getAuthorities()}">
-                        <span class="navbar-text" th:text="${r} + ' '"></span>
+                    <th:block th:each="authority : ${#authentication.getAuthorities()}">
+                        <span class="navbar-text" th:text="${authority} + ' '"></span>
                     </th:block>
                 </div>
                 <div class="nav navbar-nav">
@@ -179,13 +178,13 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <th th:text="${@successUserHandler.currentAuthenticatedUser().getId()}"
+                                            <th th:text="${authenticatedUser.id}"
                                                 scope="row"></th>
-                                            <td th:text="${@successUserHandler.currentAuthenticatedUser().getName()}"></td>
-                                            <td th:text="${@successUserHandler.currentAuthenticatedUser().getLastName()}"></td>
-                                            <td th:text="${@successUserHandler.currentAuthenticatedUser().getAge()}"></td>
-                                            <td th:text="${@successUserHandler.currentAuthenticatedUser().getEmail()}"></td>
-                                            <td th:text="${@successUserHandler.currentAuthenticatedUser().getAuthorities().iterator().next()}"></td>
+                                            <td th:text="${authenticatedUser.name}"></td>
+                                            <td th:text="${authenticatedUser.lastName}"></td>
+                                            <td th:text="${authenticatedUser.age}"></td>
+                                            <td th:text="${authenticatedUser.email}"></td>
+                                            <td th:text="${authenticatedUser.authorities.iterator().next().authority}"></td>
                                         </tr>
                                         </tbody>
                                     </table>
