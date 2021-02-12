@@ -11,6 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/users")
 public class UsersController {
@@ -25,7 +27,7 @@ public class UsersController {
 
     @GetMapping()
     public String listUsers(ModelMap model, Authentication authentication) {
-        Iterable<User> users = userService.listUsers();
+        List<User> users = userService.listUsers();
         User authenticatedUser = (User) authentication.getPrincipal();
         model.addAttribute("users", users);
         model.addAttribute("authenticatedUser", authenticatedUser);
