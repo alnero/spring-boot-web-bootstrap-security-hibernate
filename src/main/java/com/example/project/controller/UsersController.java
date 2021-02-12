@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -41,7 +42,7 @@ public class UsersController {
         String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin has access to any user page
         if (Role.AvailableRoles.ADMIN.name().equals(authenticatedUserRole) && !id.equals(authenticatedUserId)) {
-            User user = userService.getById(id).get();
+            User user = userService.getById(id);
             model.addAttribute("user", user);
             return "user";
         }
@@ -56,15 +57,15 @@ public class UsersController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute User user, @Validated String chosenRole) {
-        Role role = roleService.getByName(chosenRole);
-        user.setRole(role);
+        Set<Role> roles = roleService.getByName(chosenRole);
+        user.setRoles(roles);
         userService.add(user);
         return "redirect:/users";
     }
 
     @GetMapping("/edit")
     public String editPage(@RequestParam long id, ModelMap model) {
-        User user = userService.getById(id).get();
+        User user = userService.getById(id);
         model.addAttribute("user", user);
         model.addAttribute("action", "edit");
         return "modal";
@@ -72,15 +73,15 @@ public class UsersController {
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute User user, @Validated String chosenRole) {
-        Role role = roleService.getByName(chosenRole);
-        user.setRole(role);
+        Set<Role> roles = roleService.getByName(chosenRole);
+        user.setRoles(roles);
         userService.edit(user);
         return "redirect:/users";
     }
 
     @GetMapping("/delete")
     public String deletePage(@RequestParam long id, ModelMap model) {
-        User user = userService.getById(id).get();
+        User user = userService.getById(id);
         model.addAttribute("user", user);
         model.addAttribute("action", "delete");
         return "modal";
@@ -88,7 +89,7 @@ public class UsersController {
 
     @PostMapping("/delete")
     public String delete(@Validated Long id) {
-        userService.delete(userService.getById(id).get());
+        userService.delete(userService.getById(id));
         return "redirect:/users";
     }
 }
