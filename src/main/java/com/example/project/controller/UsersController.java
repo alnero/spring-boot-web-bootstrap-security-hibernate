@@ -34,8 +34,8 @@ public class UsersController {
         return "admin";
     }
 
-    @GetMapping("/{id}")
-    public String showUser(@PathVariable Long id, ModelMap model, Authentication authentication) {
+    @GetMapping(params = "id")
+    public String showUser(@RequestParam Long id, ModelMap model, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
         String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
@@ -50,7 +50,7 @@ public class UsersController {
             model.addAttribute("user", authenticatedUser);
             return "user";
         } else {
-            return "redirect:/users/" + authenticatedUserId;
+            return "redirect:/users?id=" + authenticatedUserId;
         }
     }
 

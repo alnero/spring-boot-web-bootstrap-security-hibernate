@@ -22,7 +22,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         if (roles.contains(Role.AvailableRoles.ADMIN.name())) {
             httpServletResponse.sendRedirect("/users");
         } else if (roles.contains(Role.AvailableRoles.USER.name())){
-            httpServletResponse.sendRedirect("/users/" + id);
+            httpServletResponse.sendRedirect("/users?id=" + id);
         }
     }
 }
