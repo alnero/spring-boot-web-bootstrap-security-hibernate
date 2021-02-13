@@ -85,12 +85,12 @@
                                                     <td th:text="${user.email}"></td>
                                                     <td th:text="${user.authorities.iterator().next().authority}"></td>
                                                     <td>
-                                                        <a th:href="@{/users/edit(id=${user.id})}" class="btn btn-info"
+                                                        <a th:href="@{/admin/users/edit(id=${user.id})}" class="btn btn-info"
                                                            id="editUserButton">Edit</a>
                                                     </td>
                                                     <td>
                                                         <a class="btn btn-danger" id="deleteUserButton"
-                                                           th:href="@{/users/delete(id=${user.id})}">Delete</a>
+                                                           th:href="@{/admin/users/delete(id=${user.id})}">Delete</a>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="card-body text-center py-3">
                                         <div class="col-lg-5 col-md-7 col-sm-6 mx-auto px-5">
-                                            <form action="#" th:action="@{/users/add}" th:object="${user}"
+                                            <form action="#" th:action="@{/admin/users/add}" th:object="${user}"
                                                   method="post">
                                                 <div class="form-group">
                                                     <label class="font-weight-bolder mb-0" for="nameInput">First

@@ -15,18 +15,18 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/users")
-public class UsersController {
+@RequestMapping("/admin")
+public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public UsersController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     public String listUsers(ModelMap model, Authentication authentication) {
         List<User> users = userService.listUsers();
         User authenticatedUser = (User) authentication.getPrincipal();
@@ -35,35 +35,15 @@ public class UsersController {
         return "admin";
     }
 
-    @GetMapping(params = "id")
-    public String showUser(@RequestParam Long id, ModelMap model, Authentication authentication) {
-        User authenticatedUser = (User) authentication.getPrincipal();
-        Long authenticatedUserId = authenticatedUser.getId();
-        String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
-        // admin has access to any user page
-        if (Role.AvailableRoles.ADMIN.name().equals(authenticatedUserRole) && !id.equals(authenticatedUserId)) {
-            User user = userService.getById(id);
-            model.addAttribute("user", user);
-            return "user";
-        }
-        // user has access only to his own page and re-directed to his own page when trying to access pages of other users
-        if (id.equals(authenticatedUserId)) {
-            model.addAttribute("user", authenticatedUser);
-            return "user";
-        } else {
-            return "redirect:/users?id=" + authenticatedUserId;
-        }
-    }
-
-    @PostMapping("/add")
+    @PostMapping("/users/add")
     public String add(@ModelAttribute User user, @Validated String chosenRole) {
         Set<Role> roles = roleService.getByName(chosenRole);
         user.setRoles(roles);
         userService.add(user);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("/edit")
+    @GetMapping("/users/edit")
     public String editPage(@RequestParam long id, ModelMap model) {
         User user = userService.getById(id);
         model.addAttribute("user", user);
@@ -71,15 +51,15 @@ public class UsersController {
         return "modal";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/users/edit")
     public String edit(@ModelAttribute User user, @Validated String chosenRole) {
         Set<Role> roles = roleService.getByName(chosenRole);
         user.setRoles(roles);
         userService.edit(user);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/users/delete")
     public String deletePage(@RequestParam long id, ModelMap model) {
         User user = userService.getById(id);
         model.addAttribute("user", user);
@@ -87,9 +67,9 @@ public class UsersController {
         return "modal";
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/users/delete")
     public String delete(@Validated Long id) {
         userService.delete(userService.getById(id));
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 }
